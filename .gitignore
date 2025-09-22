@@ -1,0 +1,71 @@
+## Ignore Visual Studio temporary files, build results, and
+## user-specific files
+
+# Build results
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# IIS
+.vs/
+.vscode/
+*.dbmdl
+*.pdb
+
+# DotCover
+.idea/
+*.dotCover
+
+# Rider
+.idea/
+
+# Logs
+*.log
+
+# NPM packages (if you're using front-end tools)
+node_modules/
+
+# Environment files
+.env
+.env.*
+
+# Azure deployment
+.publish/
+
+# Build output
+**/build/
+**/publish/
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+
+# Rider project files
+.idea/
+
+# ReSharper
+*.DotSettings.user
+
+# VS Code workspace settings
+.vscode/
+
+# NuGet packages
+*.nupkg
+packages/
+project.lock.json
+project.fragment.lock.json
+
+# Mac system files
+.DS_Store
+
+# Windows thumbnail cache
+Thumbs.db
