@@ -1,5 +1,7 @@
 using BlogAPI.Data;
 using Microsoft.EntityFrameworkCore;
+using BlogAPI.Services.Interfaces;
+using BlogAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +15,9 @@ builder.Services.AddControllers();
 //Add Swagger / OpenAPI for development testing
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+//Register Services
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 

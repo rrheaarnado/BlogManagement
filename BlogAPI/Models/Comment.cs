@@ -4,7 +4,6 @@ namespace BlogAPI.Models
 {
     public class Comment
     {
-        [Required]
         public int Id { get; set; }
 
         public string Content { get; set; } = "";
