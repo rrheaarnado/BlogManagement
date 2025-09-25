@@ -4,7 +4,7 @@ const PostItem = ({ post, user }) => {
     const [showComments, setShowComments] = useState(false); // Track visibility
 
     return (
-        <div className="w-2/3 mx-auto rounded-lg shadow-lg p-4 mb-4 bg-white text-black">
+        <div className="w-2/3 mx-auto rounded-lg shadow-lg mt-10 p-4 mb-4 bg-white text-black">
             {/* Header */}
             <div className="flex justify-between items-center mb-2">
                 <span className="font-semibold">{user.username}</span>

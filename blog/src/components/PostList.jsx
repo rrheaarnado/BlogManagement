@@ -29,16 +29,53 @@ const PostList = () => {
         },
 
         {
-            Id: 2,
+            Id: 3,
             Title: "My Second Post",
             Content: "Content of the second post goes here...",
             CreatedAt: new Date(),
             UpdatedAt: new Date(),
             Comments: [
-                { id: 3, username: "Charlie", content: "Great post!" },
+                { id: 5, username: "Charlie", content: "Great post!" },
             ],
             user: { username: "JaneDoe" },
         },
+        
+         {
+            Id: 4,
+            Title: "My Second Post",
+            Content: "Content of the second post goes here...",
+            CreatedAt: new Date(),
+            UpdatedAt: new Date(),
+            Comments: [
+                { id: 5, username: "Charlie", content: "Great post!" },
+            ],
+            user: { username: "JaneDoe" },
+        },
+
+         {
+            Id: 5,
+            Title: "My Second Post",
+            Content: "Content of the second post goes here...",
+            CreatedAt: new Date(),
+            UpdatedAt: new Date(),
+            Comments: [
+                { id: 5, username: "Charlie", content: "Great post!" },
+            ],
+            user: { username: "JaneDoe" },
+        },
+        
+         {
+            Id: 6,
+            Title: "My Second Post",
+            Content: "Content of the second post goes here...",
+            CreatedAt: new Date(),
+            UpdatedAt: new Date(),
+            Comments: [
+                { id: 5, username: "Charlie", content: "Great post!" },
+            ],
+            user: { username: "JaneDoe" },
+        },
+        
         
     ];
 

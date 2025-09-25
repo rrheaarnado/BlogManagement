@@ -17,7 +17,7 @@ const FloatingBottomBar = ({ onAdd, onSearch }) => {
       {/* Search Button */}
       <button
         onClick={() => onSearch(value)}
-        className="flex items-center gap-1 text-black text-white p-2 rounded-full hover:bg-gray-500 hover:text-white"
+        className="flex items-center justify-center gap-1 text-white p-2 rounded-full hover:bg-gray-500 hover:text-white"
       >
         <FiSearch className="w-5 h-5" /> Search
       </button>
@@ -25,7 +25,7 @@ const FloatingBottomBar = ({ onAdd, onSearch }) => {
       {/* Add Button */}
       <button
         onClick={handleAdd}
-        className="flex items-center gap-1 text-black text-white p-2 rounded-full hover:bg-gray-500 hover:text-white"
+        className="flex items-center justify-center gap-1 text-white p-2 rounded-full hover:bg-gray-500 hover:text-white"
       > 
         <FiPlus className="w-5 h-5" /> Add Post
       </button>

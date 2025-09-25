@@ -1,26 +1,21 @@
-// src/HomePage.jsx
-import React from "react";
-import { api } from "../api";
-import { useState, useEffect } from 'react'
+import Header from "../components/Header";
+import PostList from "../components/PostList";
+import BottomInputBar from "../components/BottomInputBar";
 
+function HomePage() {
+  const handleAddItem = (item) => {
+    console.log("Add item:", item);
+  };
 
-console.log("API client loaded:", api);
-
-export default function App() {
-  const [users, setUsers] = useState([]);
-  const [posts, setPosts] = useState([]);
-  const [comments, setComments] = useState([]);
-
-  useEffect(() => {
-    // Fetch all Users
-    api.getUsers().then(setUsers).catch(console.error);
-
-    // Fetch all Posts
-    api.getPosts().then(setPosts).catch(console.error);
-
-    // Fetch all Comments
-    api.getComments().then(setComments).catch(console.error);
-  }, []);
-
- 
+  return (
+    <>
+      <Header />
+       <div className="mt-15">   {/* <-- add margin top here */}
+      <PostList />
+      </div>
+      <BottomInputBar onAdd={handleAddItem} />
+    </>
+  );
 }
+
+export default HomePage;
