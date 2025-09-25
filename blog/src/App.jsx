@@ -1,67 +1,41 @@
 import { useState, useEffect } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import { api } from "./api";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import HomePage from "./pages/HomePage";
+import Header from "./components/Header";
+import PostItem from './components/PostItem';
+import LoginPage from './pages/LoginPage';
+import BottomInputBar from "./components/BottomInputBar";
+import PostList from './components/PostList';
 
-console.log("API client loaded:", api);
+function AppWrapper() {
+  const location = useLocation();
+  const showLayout = location.pathname !== "/"; // Hide on login
 
-export default function App() {
-  const [users, setUsers] = useState([]);
-  const [posts, setPosts] = useState([]);
-  const [comments, setComments] = useState([]);
-
-  useEffect(() => {
-    // Fetch all Users
-    api.getUsers().then(setUsers).catch(console.error);
-
-    // Fetch all Posts
-    api.getPosts().then(setPosts).catch(console.error);
-
-    // Fetch all Comments
-    api.getComments().then(setComments).catch(console.error);
-  }, []);
+  const handleAddItem = (item) => {
+    console.log("Add item:", item);
+  };
 
   return (
-    <div style={{ fontFamily: "Arial", padding: "20px" }}>
-      <h1>Simple API Frontend</h1>
+    <>
+      {showLayout && <Header />}
+      <PostList/>
+      <Routes>
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/home" element={<HomePage />} />
+        
+      </Routes>
 
-      {/* Users */}
-      <section>
-        <h2>Users</h2>
-        <ul>
-          {users.map((u) => (
-            <li key={u.id}>
-              <strong>{u.name}</strong> ({u.email})
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      {/* Posts */}
-      <section>
-        <h2>Posts</h2>
-        <ul>
-          {posts.map((p) => (
-            <li key={p.id}>
-              <strong>{p.title}</strong> – {p.content}
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      {/* Comments */}
-      <section>
-        <h2>Comments</h2>
-        <ul>
-          {comments.map((c) => (
-            <li key={c.id}>
-              {c.text} (by user {c.userId} on post {c.postId})
-            </li>
-          ))}
-        </ul>
-      </section>
-    </div>
+      {showLayout && <BottomInputBar onAdd={handleAddItem} />}
+    </>
   );
 }
 
+function App() {
+  return (
+    <BrowserRouter>
+      <AppWrapper />
+    </BrowserRouter>
+  );
+}
+
+export default App;
