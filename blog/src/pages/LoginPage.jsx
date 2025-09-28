@@ -1,13 +1,33 @@
-// LoginPage.jsx
 import React, { useState } from "react";
+import { api } from "../api";
+import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const navigate = useNavigate(); // use react-router navigation
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    alert(`Email: ${email}\nPassword: ${password}`);
+    setLoading(true);
+    setError("");
+
+    try {
+      const res = await api.login({ username, password });
+
+      // After successful login
+      localStorage.setItem("user", JSON.stringify({ userId: res.userId, username: res.username }));
+
+
+      navigate("/home"); // navigate programmatically
+    } catch (err) {
+      console.error(err);
+      setError("Invalid username or password");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -19,11 +39,11 @@ const LoginPage = () => {
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="block text-gray-700 mb-1">
-              Username
-            </label>
+            <label className="block text-gray-700 mb-1">Username</label>
             <input
               type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               placeholder="Enter your username"
               className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-1 focus:ring-black-500"
               required
@@ -31,9 +51,7 @@ const LoginPage = () => {
           </div>
 
           <div>
-            <label className="block text-gray-700 mb-1">
-              Password
-            </label>
+            <label className="block text-gray-700 mb-1">Password</label>
             <input
               type="password"
               value={password}
@@ -44,20 +62,16 @@ const LoginPage = () => {
             />
           </div>
 
+          {error && <p className="text-red-500">{error}</p>}
+
           <button
             type="submit"
+            disabled={loading}
             className="w-full bg-black text-white py-2 rounded-lg hover:bg-gray-700 transition"
           >
-            Login
+            {loading ? "Logging in..." : "Login"}
           </button>
         </form>
-
-        <p className="text-sm text-gray-500 dark:text-gray-400 mt-4 text-center">
-          Don't have an account?{" "}
-          <a href="#" className="text-black hover:underline">
-            Sign up
-          </a>
-        </p>
       </div>
     </div>
   );

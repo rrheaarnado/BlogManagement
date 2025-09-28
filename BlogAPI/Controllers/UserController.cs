@@ -12,6 +12,7 @@ namespace BlogAPI.Controllers
 
     public class UsersController : ControllerBase
     {
+        //Stores the reference to the service so we can use it in the constructor
         private readonly IUserService _userService;
         public UsersController(IUserService userService) => _userService = userService;
 
@@ -36,8 +37,8 @@ namespace BlogAPI.Controllers
         public async Task<ActionResult<UserDto>> Create(CreateUserDto dto)
         {
             var user = await _userService.CreateAsync(dto);
-            
-            return CreatedAtAction(nameof(GetById), new { id = user.Id }, user);   
+
+            return CreatedAtAction(nameof(GetById), new { id = user.Id }, user);
         }
 
         [HttpPut("{id:int}")] //UPDATE /api/users/{id}

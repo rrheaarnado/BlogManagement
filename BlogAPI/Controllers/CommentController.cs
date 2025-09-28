@@ -18,7 +18,7 @@ namespace BlogAPI.Controllers
         public async Task<ActionResult<IEnumerable<Comment>>> GetAll()
         {
             var comment = await _commentService.GetAllAsync();
-                
+
             return Ok(comment);
         }
 
@@ -50,12 +50,12 @@ namespace BlogAPI.Controllers
         }
 
         [HttpDelete("{id:int}")]
-        public async Task<ActionResult> Delete (int id)
+        public async Task<ActionResult> Delete(int id, [FromQuery] int userId)
         {
-            var comment = await _commentService.DeleteAsync(id);
-            if (comment == null) return NotFound();
+            var success = await _commentService.DeleteAsync(id, userId);
+            if (!success) return Forbid(); // or Unauthorized
             return NoContent();
         }
-        
+
     }
 }

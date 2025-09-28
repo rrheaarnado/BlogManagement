@@ -8,6 +8,6 @@ namespace BlogAPI.Services.Interfaces
         Task<CommentDto?> GetByIdAsync(int id);
         Task<CommentDto> CreateAsync(CreateCommentDto dto);
         Task<bool> UpdateAsync(int id, UpdateCommentDto dto);
-        Task<bool> DeleteAsync(int id);
+        Task<bool> DeleteAsync(int id, int userId);
     }
 }

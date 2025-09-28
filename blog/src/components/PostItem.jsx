@@ -1,68 +1,52 @@
-import React, { useState } from "react";
+import React from "react";
+import { Link } from "react-router-dom";
+import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+
 
 const PostItem = ({ post, user }) => {
-    const [showComments, setShowComments] = useState(false); // Track visibility
+  return (
+    <div className="w-2/3 mx-auto rounded-lg shadow-lg mt-3 p-4 mb-4 bg-white text-black border border-gray-100">
+      {/* Header */}
+      <div className="flex justify-between items-center mb-2">
+        <span className="font-semibold">{post.username || post.user?.username || "Unknown"}</span>
 
-    return (
-        <div className="w-2/3 mx-auto rounded-lg shadow-lg mt-10 p-4 mb-4 bg-white text-black">
-            {/* Header */}
-            <div className="flex justify-between items-center mb-2">
-                <span className="font-semibold">{user.username}</span>
-                <span className="text-sm text-gray-500">
-                    {post.CreatedAt.toLocaleString()}
-                </span>
-            </div>
+        <span className="text-sm text-gray-500">
+          {post?.createdAt ? new Date(post.createdAt + "Z").toLocaleString() : "Unknown date"}
 
-            {/* Title */}
-            <h2 className="text-lg font-bold">{post.Title}</h2>
+        </span>
+      </div>
 
-            {/* Content */}
-            <p>{post.Content}</p>
+      {/* Title */}
+      <h2 className="text-lg font-bold">{post.title}</h2>
 
-            {/* Toggle Comments Button */}
-            <button
-                className="mt-3 text-sm text-black-500 hover:underline"
-                onClick={() => setShowComments(!showComments)}
-            >
-                {showComments ? "Hide Comments" : "View Comments"}
-            </button>
+      {/* Content */}
+      <p className="mt-2">{post.content}</p>
 
-            {/* Comments */}
-            {showComments && (
-                <div className="mt-4 border-t pt-2">
-                    <h3 className="font-semibold mb-2">Comments</h3>
-                    {post.Comments.map((comment) => (
-                        <div
-                            key={comment.id}
-                            className="mb-2 flex justify-between items-start"
-                        >
-                            <div>
-                                <span className="font-semibold">{comment.username}:</span>{" "}
-                                {comment.content}
-                                <div className="text-xs text-gray-500">
-                                    {comment.createdAt
-                                        ? new Date(comment.createdAt).toLocaleString()
-                                        : ""}
-                                </div>
-                            </div>
+      <div className="flex justify-between text-sm mt-10 font-semibold">
+        <p className="hover:underline">
+          <Link to={`/posts/${post.id}`} className="hover:underline">
+            View Announcement
+          </Link>
+        </p>
 
-                            <div className="flex flex-col items-end text-right">
-                                <button className="text-black text-xl hover:text-gray-700">
-                                    &#x2026;
-                                </button>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            )}
+        <p className="hover:underline">
+          <Link to={`/posts/${post.id}`} className="hover:underline">
+            Comments
+          </Link>{" "}
+          <span className="text-gray-400 font-normal">(
+            {post.comments?.length === 0
+              ? "No Comment"
+              : post.comments?.length === 1
+                ? "1 Comment"
+                : `${post.comments.length} Comments`})
+          </span>
+        </p>
 
-            <input
-                type="text"
-                placeholder="Add Comment..."
-                className="w-full mt-2 px-4 py-2 bg-white border border-gray-300 rounded-xl hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-black-300"
-            />
-        </div>
-    );
+
+      </div>
+    </div>
+  );
 };
 
 export default PostItem;

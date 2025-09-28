@@ -8,6 +8,6 @@ namespace BlogAPI.Services.Interfaces
         Task<PostDto> GetByIdAsync(int id);
         Task<PostDto> CreateAsync(CreatePostDto dto);
         Task<bool> UpdateAsync(int id, UpdatePostDto dto);
-        Task<bool> DeleteAsync(int id);
+        Task<bool> DeleteAsync(int id, int userId);
     }
 }

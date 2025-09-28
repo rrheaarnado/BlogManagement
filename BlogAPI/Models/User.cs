@@ -10,7 +10,7 @@ namespace BlogAPI.Models
         public string Password { get; set; } = "";
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
-        public bool IsActive { get; set; } = false;
+        public bool IsActive { get; set; } = true;
 
         //Navigation Properties
         public ICollection<Post> Posts { get; set; } = new List<Post>();

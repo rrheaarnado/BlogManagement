@@ -3,13 +3,20 @@ using BlogAPI.Services.Interfaces;
 using BlogAPI.Dtos.User;
 using Microsoft.EntityFrameworkCore;
 using BlogAPI.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace BlogAPI.Services
 {
     public class UserService : IUserService
     {
         private readonly AppDbContext _db;
-        public UserService(AppDbContext db) => _db = db;
+        private readonly PasswordHasher<User> _passwordHasher;
+
+        public UserService(AppDbContext db)
+        {
+            _db = db;
+            _passwordHasher = new PasswordHasher<User>();
+        }
 
         public async Task<IEnumerable<UserDto>> GetAllAsync()
         {
@@ -46,11 +53,13 @@ namespace BlogAPI.Services
             {
                 Username = dto.Username,
                 Email = dto.Email,
-                Password = dto.Password,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now,
                 IsActive = false
             };
+
+            //Hash Password
+            user.Password = _passwordHasher.HashPassword(user, dto.Password);
 
             _db.Users.Add(user);
             await _db.SaveChangesAsync();
@@ -73,8 +82,7 @@ namespace BlogAPI.Services
             user.Email = dto.Email;
 
             if (!string.IsNullOrWhiteSpace(dto.Password))
-                user.Password = dto.Password;
-
+                user.Password = _passwordHasher.HashPassword(user, dto.Password);
             user.UpdatedAt = DateTime.Now;
 
             await _db.SaveChangesAsync();
@@ -94,6 +102,15 @@ namespace BlogAPI.Services
             await _db.SaveChangesAsync();
 
             return true;
+        }
+
+        public async Task<User?> ValidateUserAsync(string username, string password)
+        {
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.Username == username);
+            if (user == null) return null;
+
+            var result = _passwordHasher.VerifyHashedPassword(user, user.Password, password);
+            return result == PasswordVerificationResult.Success ? user : null;
         }
     }
 }

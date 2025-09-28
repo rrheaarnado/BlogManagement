@@ -75,21 +75,24 @@ namespace BlogAPI.Services
             await _db.SaveChangesAsync();
 
             return true;
-        } 
-        
-        public async Task<bool> DeleteAsync(int id)
+        }
+
+        public async Task<bool> DeleteAsync(int id, int userId)
         {
-            var comment = await _db.Comments.FindAsync();
+            var comment = await _db.Comments.FindAsync(id);
             if (comment == null) return false;
 
-            _db.Comments.Remove(comment);
+            // Only allow if the user is the owner
+            if (comment.UserId != userId) return false;
 
+            _db.Comments.Remove(comment);
             await _db.SaveChangesAsync();
 
             return true;
         }
 
-        
+
+
 
     }
 }

@@ -1,4 +1,6 @@
 using System.ComponentModel.DataAnnotations;
+using BlogAPI.Dtos.User;
+using BlogAPI.Dtos.Comment;
 
 namespace BlogAPI.Dtos.Post
 {
@@ -13,6 +15,10 @@ namespace BlogAPI.Dtos.Post
 
         //Foreign Keys
         public int UserId { get; set; }
-        
+        public UserDto? User { get; set; }
+        public List<CommentDto> Comments { get; set; } =
+        new List<CommentDto>();
+        public string Username { get; set; }
+
     }
 }

@@ -50,12 +50,12 @@ namespace BlogAPI.Controllers
         }
 
         [HttpDelete("{id:int}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult> Delete(int id, [FromQuery] int userId)
         {
-            var post = await _postService.DeleteAsync(id);
-            if (post == null) return NotFound();
-
+            var success = await _postService.DeleteAsync(id, userId);
+            if (!success) return Forbid(); // or Unauthorized
             return NoContent();
         }
+
     }
 }

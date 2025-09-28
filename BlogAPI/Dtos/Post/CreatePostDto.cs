@@ -9,9 +9,8 @@ namespace BlogAPI.Dtos.Post
 
         [Required]
         public string Content { get; set; } = "";
-
         public bool IsPublished { get; set; } = true;
-        public int UserId { get; set; }
 
+        public int UserId { get; set; }
     }
 }
