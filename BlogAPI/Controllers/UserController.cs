@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace BlogAPI.Controllers
 {
-    [Authorize]
+
     [ApiController]
     [Route("api/[controller]")]
 
@@ -36,6 +36,7 @@ namespace BlogAPI.Controllers
             return Ok(user);
         }
 
+        [AllowAnonymous]
         [HttpPost] //POST /api/Users
         public async Task<ActionResult<UserDto>> Create(CreateUserDto dto)
         {

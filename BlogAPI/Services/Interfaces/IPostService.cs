@@ -6,7 +6,7 @@ namespace BlogAPI.Services.Interfaces
     {
         Task<IEnumerable<PostDto>> GetAllAsync();
         Task<PostDto> GetByIdAsync(int id);
-        Task<PostDto> CreateAsync(CreatePostDto dto);
+        Task<PostDto> CreateAsync(CreatePostDto dto, int userId);
         Task<bool> UpdateAsync(int id, UpdatePostDto dto);
         Task<bool> DeleteAsync(int id, int userId);
     }

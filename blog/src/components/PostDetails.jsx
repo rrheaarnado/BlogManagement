@@ -7,12 +7,16 @@ import Comment from "./Comment";
 import ActionMenu from "./ActionMenu";
 import StatusModal from "./StatusModal";
 
+
 const PostDetails = () => {
   const { id } = useParams(); // get post ID from URL
   const navigate = useNavigate();
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
-  const currentUser = JSON.parse(localStorage.getItem("user"));
+
+  const auth = JSON.parse(localStorage.getItem("auth"));
+  const currentUser = { userId: auth?.userId, username: auth?.username };
+
   const [modal, setModal] = useState({
     isOpen: false,
     title: "",
@@ -45,10 +49,10 @@ const PostDetails = () => {
 
   const handleDeletePost = async (postId) => {
     try {
-      await api.deletePost(postId, currentUser.userId);
+      await api.deletePost(postId);
       setModal({
         isOpen: true,
-        status: "success",   // ✅ use status
+        status: "error",
         title: "Success",
         message: "Post deleted successfully!",
       });
@@ -61,7 +65,7 @@ const PostDetails = () => {
       console.log("Failed  to delete posts", err);
       setModal({
         isOpen: true,
-        status: "error",
+        status: "success",
         title: "Error",
         message: "Failed to delete post. Please try again.",
       });

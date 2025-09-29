@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect } from "react";
 import { FiPlus, FiSearch } from "react-icons/fi";
 import Modal from "./Modal";
 import StatusModal from "./StatusModal";
+import { api } from "../api";
+
 
 const FloatingBottomBar = ({ onAdd, onSearch }) => {
   const [title, setTitle] = useState("");
@@ -13,10 +15,9 @@ const FloatingBottomBar = ({ onAdd, onSearch }) => {
     isOpen: false,
     title: "",
     message: "",
-    type: "success"
+    type: "success",
   });
 
-  // Auto-resize for contentEditable (optional)
   useEffect(() => {
     const editor = editorRef.current;
     if (editor) {
@@ -31,22 +32,15 @@ const FloatingBottomBar = ({ onAdd, onSearch }) => {
     if (!title.trim() || !content.trim()) return;
 
     try {
-      const auth = JSON.parse(localStorage.getItem("auth")); // <-- use "auth"
-      console.log(auth.userId);
+      const auth = JSON.parse(localStorage.getItem("auth"));
       if (!auth?.userId) return alert("Please login first");
-      
-      await onAdd({
+
+      await api.createPost({
         title,
         content,
-        userId: auth.userId, // <-- correct userId
+        isPublished: true,
+        userId: Number(auth.userId),
       });
-
-      console.log({
-  title,
-  content,
-  userId: Number(auth.userId),
-});
-
 
       setTitle("");
       setContent("");
@@ -60,6 +54,7 @@ const FloatingBottomBar = ({ onAdd, onSearch }) => {
         message: "Post added successfully!",
       });
     } catch (err) {
+      console.error(err);
       setModal({
         isOpen: true,
         type: "error",
@@ -72,7 +67,6 @@ const FloatingBottomBar = ({ onAdd, onSearch }) => {
   return (
     <>
       <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-black shadow-xl rounded-full flex items-center gap-2 px-4 py-2">
-        {/* Search Button */}
         <button
           onClick={() => onSearch(content)}
           className="flex items-center justify-center gap-1 text-white p-2 rounded-full hover:bg-gray-500 hover:text-white"
@@ -80,7 +74,6 @@ const FloatingBottomBar = ({ onAdd, onSearch }) => {
           <FiSearch className="w-5 h-5" /> Search
         </button>
 
-        {/* Add Button */}
         <button
           onClick={() => setIsModalOpen(true)}
           className="flex items-center justify-center gap-1 text-white p-2 rounded-full hover:bg-gray-500 hover:text-white"
@@ -89,7 +82,6 @@ const FloatingBottomBar = ({ onAdd, onSearch }) => {
         </button>
       </div>
 
-      {/* Modal */}
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <form onSubmit={handleSubmit} className="flex flex-col gap-2">
           <h2 className="text-xl text-center font-semibold mb-4">
@@ -128,11 +120,10 @@ const FloatingBottomBar = ({ onAdd, onSearch }) => {
 
       <StatusModal
         isOpen={modal.isOpen}
-        status={modal.status}
+        status={modal.type} // ✅ fixed
         message={modal.message}
         onClose={() => setModal({ ...modal, isOpen: false })}
       />
-
     </>
   );
 };

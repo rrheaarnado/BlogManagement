@@ -6,6 +6,7 @@ using BlogAPI.Models;
 using BlogAPI.Dtos.User;
 using BlogAPI.Dtos.Comment;
 
+
 namespace BlogAPI.Services
 {
     public class PostService : IPostService
@@ -98,7 +99,7 @@ namespace BlogAPI.Services
         }
 
 
-        public async Task<PostDto> CreateAsync(CreatePostDto dto)
+        public async Task<PostDto> CreateAsync(CreatePostDto dto, int userId)
         {
             var post = new Post
             {
@@ -107,7 +108,7 @@ namespace BlogAPI.Services
                 IsPublished = dto.IsPublished,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now,
-                UserId = dto.UserId
+                UserId = userId
             };
 
             _db.Posts.Add(post);
@@ -125,6 +126,7 @@ namespace BlogAPI.Services
                 Username = user?.Username ?? "Unknown"
             };
         }
+
         public async Task<bool> UpdateAsync(int id, UpdatePostDto dto)
         {
             var post = await _db.Posts.FindAsync();

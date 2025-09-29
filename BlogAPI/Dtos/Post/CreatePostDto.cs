@@ -11,6 +11,6 @@ namespace BlogAPI.Dtos.Post
         public string Content { get; set; } = "";
         public bool IsPublished { get; set; } = true;
 
-        public int UserId { get; set; }
+        // public int UserId { get; set; }
     }
 }
