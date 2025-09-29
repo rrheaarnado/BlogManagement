@@ -42,14 +42,6 @@ function HomePage() {
     }
   };
 
-
-
-  // **Logout function**
-  const handleLogout = () => {
-    localStorage.removeItem("user"); // remove login info
-    window.location.href = "/"; // redirect to login
-  };
-
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -57,7 +49,7 @@ function HomePage() {
       <div className="flex flex-1 mt-4">
         {/* Sidebar */}
         <div className="w-20 flex-shrink-0 sticky top-20 h-[calc(100vh-80px)] p-5 ml-5">
-          <Sidebar onLogout={handleLogout} />
+          <Sidebar />
         </div>
 
         {/* Post list and input */}

@@ -9,7 +9,7 @@ namespace BlogAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class CommentsController : ControllerBase
+    public class CommentsController : ControllerBase //Inherits methods from Controller base: Ok() NotFounnd() NoContent() CreatedAtAction() are methods inherited from ControllerBase
     {
         private readonly ICommentService _commentService;
         public CommentsController(ICommentService commentService) => _commentService = commentService;
@@ -31,6 +31,15 @@ namespace BlogAPI.Controllers
             return Ok(comment);
         }
 
+        //
+        [HttpGet("post/{postId:int}")]
+        public async Task<ActionResult<IEnumerable<CommentDto>>> GetCommentsByPost(int postId)
+        {
+            var comments = await _commentService.GetByPostIdAsync(postId);
+            return Ok(comments);
+        }
+
+
         [HttpPost] //POST /api/comments
         public async Task<ActionResult<Comment>> Create(CreateCommentDto dto)
         {
@@ -49,7 +58,7 @@ namespace BlogAPI.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{id:int}")]
+         [HttpDelete("{id:int}")]
         public async Task<ActionResult> Delete(int id, [FromQuery] int userId)
         {
             var success = await _commentService.DeleteAsync(id, userId);

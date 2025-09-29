@@ -13,17 +13,22 @@ namespace BlogAPI.Services
 
         public async Task<IEnumerable<CommentDto>> GetAllAsync()
         {
-            var comment = await _db.Comments
-                .Select(c => new CommentDto
-                {
-                    Id = c.Id,
-                    Content = c.Content,
-                    UserId = c.UserId,
-                    PostId = c.PostId
-                })
-                .ToListAsync();
+            var comments = await _db.Comments
+            .Include(c => c.User)
+            .Select(c => new CommentDto
+            {
+                Id = c.Id,
+                Content = c.Content,
+                UserId = c.UserId,
+                Username = c.User != null ? c.User.Username : "Unknown",
+                PostId = c.PostId,
+                CreatedAt = c.CreatedAt,
+                UpdatedAt = c.UpdatedAt
+            })
+            .ToListAsync();
 
-            return comment;
+
+            return comments;
         }
 
         public async Task<CommentDto?> GetByIdAsync(int id)
@@ -40,6 +45,24 @@ namespace BlogAPI.Services
             };
         }
 
+        public async Task<IEnumerable<CommentDto>> GetByPostIdAsync(int postId)
+        {
+            return await _db.Comments
+            .Where(c => c.PostId == postId)
+            .Include(c => c.User)
+            .Select(c => new CommentDto
+            {
+                Id = c.Id,
+                Content = c.Content,
+                UserId = c.UserId,
+                Username = c.User != null ? c.User.Username : "Unknown",
+                PostId = c.PostId,
+                CreatedAt = c.CreatedAt
+            })
+            .ToListAsync();
+
+        }
+
         public async Task<CommentDto> CreateAsync(CreateCommentDto dto)
         {
             var comment = new Comment
@@ -54,18 +77,26 @@ namespace BlogAPI.Services
             _db.Comments.Add(comment);
             await _db.SaveChangesAsync();
 
+            var savedComment = await _db.Comments
+    .Include(c => c.User)
+    .FirstOrDefaultAsync(c => c.Id == comment.Id);
+
             return new CommentDto
             {
-                Id = comment.Id,
-                Content = comment.Content,
-                UserId = comment.UserId,
-                PostId = comment.PostId
+                Id = savedComment!.Id,
+                Content = savedComment.Content,
+                UserId = savedComment.UserId,
+                Username = savedComment.User != null ? savedComment.User.Username : "Unknown",
+                PostId = savedComment.PostId,
+                CreatedAt = savedComment.CreatedAt,
+                UpdatedAt = savedComment.UpdatedAt
             };
+
         }
 
         public async Task<bool> UpdateAsync(int id, UpdateCommentDto dto)
         {
-            var comment = await _db.Comments.FindAsync();
+            var comment = await _db.Comments.FindAsync(id);
             if (comment == null) return false;
 
             comment.Content = dto.Content;

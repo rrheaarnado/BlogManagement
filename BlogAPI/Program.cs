@@ -2,17 +2,36 @@ using BlogAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using BlogAPI.Services.Interfaces;
 using BlogAPI.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+
 
 var builder = WebApplication.CreateBuilder(args);
+//Secret key for signing tokens
+var key = Encoding.UTF8.GetBytes("ThisIsASuperSecretKeyForJWT1234567890"); 
 
 //Add DbContext with SQL Server
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-//Add controllers (needed if you’ll build API controllers)
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(key),
+            ValidateIssuer = false,
+            ValidateAudience = false
+        };
+    });
+
+
+//Add controllers
 builder.Services.AddControllers();
 
-//Add Swagger / OpenAPI for development testing
+//Add Swagger 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -46,9 +65,9 @@ if (app.Environment.IsDevelopment())
 app.UseCors("AllowFrontend");
 
 // Middleware
-app.UseHttpsRedirection();
-
-// Map Controllers
-app.MapControllers();
+app.UseHttpsRedirection(); // 1. Redirect HTTP → HTTPS
+app.UseAuthentication(); // 2. Check JWT/authentication
+app.UseAuthorization(); // 3. Enforce access rules
+app.MapControllers(); // 4. Map endpoints
 
 app.Run();

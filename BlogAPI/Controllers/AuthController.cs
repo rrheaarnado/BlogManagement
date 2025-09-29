@@ -4,6 +4,11 @@ using BlogAPI.Services.Interfaces;
 using BlogAPI.Dtos.User;
 using BlogAPI.Models;
 using BlogAPI.Data;
+using System.Text;                               // For Encoding
+using System.Security.Claims;                     // For Claim, ClaimsIdentity, ClaimTypes
+using Microsoft.IdentityModel.Tokens;            // For SymmetricSecurityKey, SigningCredentials, SecurityAlgorithms
+using System.IdentityModel.Tokens.Jwt;           // For JwtSecurityTokenHandler, SecurityTokenDescriptor
+
 
 namespace BlogAPI.Controllers
 {
@@ -23,8 +28,27 @@ namespace BlogAPI.Controllers
             if (user == null)
                 return Unauthorized(new { message = "Invalid username or password" });
 
-            return Ok(new { username = user.Username, userId = user.Id });
+            // -------------------- JWT Creation --------------------
+            var key = Encoding.UTF8.GetBytes("ThisIsASuperSecretKeyForJWT1234567890"); // 32+ chars
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[]
+                {
+        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+        new Claim(ClaimTypes.Name, user.Username)
+    }),
+                Expires = DateTime.UtcNow.AddHours(1),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
 
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var jwtToken = tokenHandler.WriteToken(token);
+
+            // ------------------------------------------------------
+
+            // Return user info + JWT
+            return Ok(new { username = user.Username, userId = user.Id, token = jwtToken });
         }
     }
 }

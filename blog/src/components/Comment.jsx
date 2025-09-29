@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import { api } from "../api";
 import ActionMenu from "./ActionMenu";
@@ -9,6 +9,20 @@ const Comment = ({ post }) => {
   const [comments, setComments] = useState(post.comments || []);
   // Get current logged-in user from localStorage
   const currentUser = JSON.parse(localStorage.getItem("user"));
+  useEffect(() => {
+    const fetchComments = async () => {
+      try {
+        const data = await api.getCommentsByPost(post.id);
+        setComments(data); // data already has Username from backend
+      } catch (err) {
+        console.error("Failed to fetch comments:", err);
+      }
+    };
+
+    fetchComments();
+  }, [post.id]);
+
+
   const [modal, setModal] = useState({
     isOpen: false,
     title: "",
@@ -74,10 +88,10 @@ const Comment = ({ post }) => {
             <div key={comment.id} className="mb-3 flex justify-between items-start border-b border-gray-300 p-2 rounded-sm">
               <div>
                 <p className="text-md font-semibold flex items-center gap-2">
-                  {comment.user?.username || currentUser.username || "Unknown"}
+                     {comment.username || "Unknown"}
                   <span className="text-xs font-normal text-gray-500">
                     {comment.createdAt
-                      ? new Date(comment.createdAt + "Z").toLocaleString()
+                      ? new Date(comment.createdAt).toLocaleString()
                       : "Unknown date"}
                   </span>
                 </p>

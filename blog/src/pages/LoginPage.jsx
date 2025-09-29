@@ -17,11 +17,17 @@ const LoginPage = () => {
     try {
       const res = await api.login({ username, password });
 
-      // After successful login
-      localStorage.setItem("user", JSON.stringify({ userId: res.userId, username: res.username }));
+      // Store JWT and user info in localStorage
+      localStorage.setItem(
+        "auth",
+        JSON.stringify({
+          userId: res.userId,
+          username: res.username,
+          token: res.token, // <-- store JWT
+        })
+      );
 
-
-      navigate("/home"); // navigate programmatically
+      navigate("/home"); // navigate to protected route
     } catch (err) {
       console.error(err);
       setError("Invalid username or password");

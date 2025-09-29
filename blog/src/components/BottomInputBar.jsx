@@ -31,17 +31,26 @@ const FloatingBottomBar = ({ onAdd, onSearch }) => {
     if (!title.trim() || !content.trim()) return;
 
     try {
-      const user = JSON.parse(localStorage.getItem("user"));
-
+      const auth = JSON.parse(localStorage.getItem("auth")); // <-- use "auth"
+      console.log(auth.userId);
+      if (!auth?.userId) return alert("Please login first");
+      
       await onAdd({
         title,
         content,
-        userId: user?.id, // <-- important
+        userId: auth.userId, // <-- correct userId
       });
+
+      console.log({
+  title,
+  content,
+  userId: Number(auth.userId),
+});
+
 
       setTitle("");
       setContent("");
-      editorRef.current.innerHTML = "";
+      if (editorRef.current) editorRef.current.innerHTML = "";
       setIsModalOpen(false);
 
       setModal({

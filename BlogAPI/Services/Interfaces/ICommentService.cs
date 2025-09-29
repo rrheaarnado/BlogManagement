@@ -9,5 +9,6 @@ namespace BlogAPI.Services.Interfaces
         Task<CommentDto> CreateAsync(CreateCommentDto dto);
         Task<bool> UpdateAsync(int id, UpdateCommentDto dto);
         Task<bool> DeleteAsync(int id, int userId);
+        Task<IEnumerable<CommentDto>> GetByPostIdAsync(int postId);
     }
 }

@@ -2,13 +2,14 @@ import React from "react";
 import { Navigate } from "react-router-dom";
 
 const ProtectedRoute = ({ children }) => {
-    const user = localStorage.getItem("user"); // check login
+  const auth = JSON.parse(localStorage.getItem("auth")); // auth now includes token
 
-    if (!user) {
-        return <Navigate to="/" replace />; // redirect if not logged in
-    }
+  if (!auth || !auth.token) {
+    // No JWT found → redirect to login
+    return <Navigate to="/" replace />;
+  }
 
-    return children;
+  return children; // user is logged in and has token
 };
 
 export default ProtectedRoute;

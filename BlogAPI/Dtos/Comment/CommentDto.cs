@@ -1,3 +1,4 @@
+
 namespace BlogAPI.Dtos.Comment
 {
     public class CommentDto
@@ -10,6 +11,7 @@ namespace BlogAPI.Dtos.Comment
         //Foreign Keys
         public int UserId { get; set; }
         public int PostId { get; set; }
+        public string Username { get; set; }
     }
 
 }

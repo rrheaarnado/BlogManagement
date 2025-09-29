@@ -4,9 +4,11 @@ using BlogAPI.Data;
 using BlogAPI.Models;
 using BlogAPI.Dtos.User;
 using BlogAPI.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BlogAPI.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
 
@@ -24,6 +26,7 @@ namespace BlogAPI.Controllers
             return Ok(user);
         }
 
+        [Authorize]
         [HttpGet("{id:int}")] //READ ALL: GET /api/{id}
         public async Task<ActionResult<UserDto>> GetById(int id)
         {

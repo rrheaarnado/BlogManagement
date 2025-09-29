@@ -1,43 +1,49 @@
 import React, { useEffect, useState } from "react";
 import { UserIcon } from "@heroicons/react/24/solid";
-import { api } from "../api"; // make sure this points to your API client
+import { useNavigate } from "react-router-dom";
+import { api } from "../api";
 
 const Header = () => {
-    const [username, setUsername] = useState("");
+  const [username, setUsername] = useState("");
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                const userData = JSON.parse(localStorage.getItem("user"));
-                if (!userData?.userId) return; // <-- use userId, not id
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const auth = JSON.parse(localStorage.getItem("auth"));
+        if (!auth?.userId || !auth.token) {
+          navigate("/"); // redirect to login if no auth info
+          return;
+        }
 
-                // Fetch user info from backend
-                const user = await api.getUser(userData.userId);
-                if (user && user.username) {
-                    setUsername(user.username);
-                }
-            } catch (err) {
-                console.error("Failed to fetch user:", err);
-            }
-        };
+        const user = await api.getUser(auth.userId, auth.token);
+        if (user?.username) {
+          setUsername(user.username);
+        } else {
+          // If user not found, clear auth and redirect
+          localStorage.removeItem("auth");
+          navigate("/");
+        }
+      } catch (err) {
+        console.error("Failed to fetch user:", err);
+        localStorage.removeItem("auth");
+        navigate("/"); // redirect to login on error
+      }
+    };
 
-        fetchUser();
-    }, []);
+    fetchUser();
+  }, [navigate]);
 
-
-    return (
-        <header className="bg-black text-white sticky top-0 z-50 shadow-md">
-            <div className="container mx-auto flex justify-between items-center py-4 px-6">
-                {/* Logo */}
-                <div>Announcements</div>
-
-                {/* User Login */}
-                <div className="flex items-center hidden md:flex gap-1">
-                    <UserIcon className="w-5 h-5" /> {username ? username : "User Login"}
-                </div>
-            </div>
-        </header>
-    );
+  return (
+    <header className="bg-black text-white sticky top-0 z-50 shadow-md">
+      <div className="container mx-auto flex justify-between items-center py-4 px-6">
+        <div>Announcements</div>
+        <div className="flex items-center hidden md:flex gap-1">
+          <UserIcon className="w-5 h-5" /> {username ? username : "User Login"}
+        </div>
+      </div>
+    </header>
+  );
 };
 
 export default Header;

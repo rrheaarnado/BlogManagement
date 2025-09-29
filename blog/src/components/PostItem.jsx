@@ -12,7 +12,9 @@ const PostItem = ({ post, user }) => {
         <span className="font-semibold">{post.username || post.user?.username || "Unknown"}</span>
 
         <span className="text-sm text-gray-500">
-          {post?.createdAt ? new Date(post.createdAt + "Z").toLocaleString() : "Unknown date"}
+           {post.createdAt
+                      ? new Date(post.createdAt).toLocaleString()
+                      : "Unknown date"}
 
         </span>
       </div>
