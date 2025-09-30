@@ -3,9 +3,9 @@ import { useParams, useNavigate } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import { api } from "../api";
-import Comment from "./Comment";
-import ActionMenu from "./ActionMenu";
-import StatusModal from "./StatusModal";
+import Comment from "../components/Comment";
+import ActionMenu from "../components/ActionMenu";
+import StatusModal from "../components/StatusModal";
 
 
 const PostDetails = () => {
@@ -50,6 +50,7 @@ const PostDetails = () => {
   const handleDeletePost = async (postId) => {
     try {
       await api.deletePost(postId);
+
       setModal({
         isOpen: true,
         status: "error",
@@ -57,23 +58,26 @@ const PostDetails = () => {
         message: "Post deleted successfully!",
       });
 
-
       setTimeout(() => {
-        navigate("/home"); // homepage route
+        navigate("/home");
       }, 1500);
     } catch (err) {
-      console.log("Failed  to delete posts", err);
+      let message = "Failed to delete post. Please try again.";
+
+      if (err.message.includes("403")) {
+        message = "You are not allowed to delete this post.";
+      }
+
+      console.log("Failed to delete post", err);
       setModal({
         isOpen: true,
         status: "success",
         title: "Error",
-        message: "Failed to delete post. Please try again.",
+        message,
       });
-
-
     }
-  }
 
+  };
   return (
     <div className="w-full mt-6 px-4">
       {/* Back Arrow */}
@@ -84,17 +88,21 @@ const PostDetails = () => {
         <FiArrowLeft className="w-6 h-6" /> Back
       </button>
 
-      {/* Post Container */}
+     
       <div className="w-full flex justify-center mb-6">
-        <div className="w-full max-w-5xl border-b-1 border-gray-300 shadow-">
-
+        
+         {/* Post Container */}
+        <div className="w-full max-w-5xl border-b-1 px-4 py-4 border-gray-300 shadow">
           {/* User Info */}
           {/* User Info */}
           <div className="mb-2 flex justify-between">
             <div>
               <span className="font-semibold text-lg">{post.username || post.user?.username || "Unknown"}</span>
-              <span className="text-xs ml-3 text-gray-500">
-                {post.createdAt ? new Date(post.createdAt + "Z").toLocaleString() : "Unknown date"}
+              <span className="text-sm text-gray-500 ml-2">
+                {post.createdAt
+                  ? new Date(post.createdAt).toLocaleString()
+                  : "Unknown date"}
+
               </span>
             </div>
             {/* Reusable ActionMenu for Post */}
@@ -119,12 +127,18 @@ const PostDetails = () => {
           <h2 className="text-xl font-bold mb-2">{post.title}</h2>
 
           {/* Post Content */}
-          <p className="text-gray-800 mb-2">{post.content}</p>
+          {/* Content */}
+          <div
+            className="mt-2 overflow-hidden mt-4"
+            dangerouslySetInnerHTML={{ __html: post.content }}
+          ></div>
         </div>
       </div>
 
       {/* Comments Container */}
-      <Comment post={post} />
+      <Comment postId={Number(post.id)} currentUser={currentUser} />
+
+
 
       <StatusModal
         isOpen={modal.isOpen}

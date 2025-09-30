@@ -5,47 +5,42 @@ import StarterKit from "@tiptap/starter-kit";
 
 
 const PostItem = ({ post, user }) => {
+  
   return (
     <div className="w-2/3 mx-auto rounded-lg shadow-lg mt-3 p-4 mb-4 bg-white text-black border border-gray-100">
-      {/* Header */}
-      <div className="flex justify-between items-center mb-2">
-        <span className="font-semibold">{post.username || post.user?.username || "Unknown"}</span>
-
-        <span className="text-sm text-gray-500">
-           {post.createdAt
-                      ? new Date(post.createdAt).toLocaleString()
-                      : "Unknown date"}
-
-        </span>
-      </div>
-
+  
       {/* Title */}
       <h2 className="text-lg font-bold">{post.title}</h2>
 
       {/* Content */}
-      <p className="mt-2">{post.content}</p>
+      <div
+        className="mt-2 overflow-hidden line-clamp-3 mt-4"
+        dangerouslySetInnerHTML={{ __html: post.content }}
+      ></div>
 
-      <div className="flex justify-between text-sm mt-10 font-semibold">
-        <p className="hover:underline">
+      {/* Actions */}
+      <div className="flex justify-between text-sm mt-6 font-semibold">
+        {/* Read More link */}
+        <p className="text-black-500 hover:underline">
           <Link to={`/posts/${post.id}`} className="hover:underline">
-            View Announcement
+            Read More
           </Link>
         </p>
 
+        {/* Comments */}
         <p className="hover:underline">
-          <Link to={`/posts/${post.id}`} className="hover:underline">
-            Comments
-          </Link>{" "}
-          <span className="text-gray-400 font-normal">(
+           <Link to={`/posts/${post.id}`} className="hover:underline">
+            Comments{" "}
+
+            <span className="text-gray-400 font-normal">(
             {post.comments?.length === 0
               ? "No Comment"
               : post.comments?.length === 1
                 ? "1 Comment"
                 : `${post.comments.length} Comments`})
           </span>
+          </Link>
         </p>
-
-
       </div>
     </div>
   );

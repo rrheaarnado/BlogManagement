@@ -63,23 +63,23 @@ namespace BlogAPI.Services
 
         }
 
-        public async Task<CommentDto> CreateAsync(CreateCommentDto dto)
+        public async Task<CommentDto> CreateAsync(CreateCommentDto dto, int userId, int postId)
         {
             var comment = new Comment
             {
                 Content = dto.Content,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now,
-                UserId = dto.UserId,
-                PostId = dto.PostId
+                UserId = userId,
+                PostId = postId,
             };
 
             _db.Comments.Add(comment);
             await _db.SaveChangesAsync();
 
             var savedComment = await _db.Comments
-    .Include(c => c.User)
-    .FirstOrDefaultAsync(c => c.Id == comment.Id);
+                .Include(c => c.User)
+                .FirstOrDefaultAsync(c => c.Id == comment.Id);
 
             return new CommentDto
             {

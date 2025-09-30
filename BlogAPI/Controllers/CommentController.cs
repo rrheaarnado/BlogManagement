@@ -4,6 +4,7 @@ using BlogAPI.Models;
 using BlogAPI.Data;
 using BlogAPI.Dtos.Comment;
 using BlogAPI.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BlogAPI.Controllers
 {
@@ -39,14 +40,21 @@ namespace BlogAPI.Controllers
             return Ok(comments);
         }
 
+        [Authorize]
+[HttpPost]
+public async Task<ActionResult<CommentDto>> Create(CreateCommentDto dto)
+{
+    var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)
+                      ?? User.FindFirst("nameid");
+    if (userIdClaim == null)
+        return Unauthorized("User ID claim missing in token");
 
-        [HttpPost] //POST /api/comments
-        public async Task<ActionResult<Comment>> Create(CreateCommentDto dto)
-        {
-            var comment = await _commentService.CreateAsync(dto);
+    var userId = int.Parse(userIdClaim.Value);
 
-            return CreatedAtAction(nameof(GetById), new { id = comment.Id }, comment);
-        }
+    var comment = await _commentService.CreateAsync(dto, userId, dto.PostId);
+
+    return CreatedAtAction(nameof(GetById), new { id = comment.Id }, comment);
+}
 
 
         [HttpPut("{id:int}")] //UPDATE /api/comments/{id}

@@ -50,5 +50,7 @@ namespace BlogAPI.Controllers
             // Return user info + JWT
             return Ok(new { username = user.Username, userId = user.Id, token = jwtToken });
         }
+
+        
     }
 }

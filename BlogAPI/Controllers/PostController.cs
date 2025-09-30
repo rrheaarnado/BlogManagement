@@ -37,13 +37,25 @@ namespace BlogAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Post>> Create(CreatePostDto dto)
         {
-            // get logged-in user's ID from JWT
-            var userId = int.Parse(User.FindFirst("nameid").Value);
+            // 1. Look for the logged-in user’s ID in the JWT claims
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)
+                              ?? User.FindFirst("nameid");
+            // 2. If no claim found, block the request
+            if (userIdClaim == null)
+                return Unauthorized("User ID claim missing in token");
 
+            // 3. Convert the claim value (string) into an integer userId
+            var userId = int.Parse(userIdClaim.Value);
+
+            // 4. Call the service layer to actually create the post,
+            //passing in the post data (dto) and the userId
             var post = await _postService.CreateAsync(dto, userId);
 
+            // 5. Return a 201 Created response with a Location header
+            //pointing to the new post’s GetById endpoint
             return CreatedAtAction(nameof(GetById), new { id = post.Id }, post);
         }
+
 
         [HttpPut("{id:int}")]
         public async Task<ActionResult> Update(int id, UpdatePostDto dto)
@@ -58,15 +70,22 @@ namespace BlogAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            // Get logged-in user's ID from JWT claim
-            var userId = int.Parse(User.FindFirst("userId")?.Value ?? "0");
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)
+                              ?? User.FindFirst("nameid");
+
+            if (userIdClaim == null)
+                return Unauthorized("User ID claim missing in token");
+
+            var userId = int.Parse(userIdClaim.Value);
 
             var success = await _postService.DeleteAsync(id, userId);
 
-            if (!success) return Forbid("You are not allowed to delete this post.");
+            if (!success)
+                return Forbid("You are not allowed to delete this post.");
 
             return NoContent();
         }
+
 
 
     }

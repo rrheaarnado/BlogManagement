@@ -55,7 +55,7 @@ namespace BlogAPI.Services
                 Email = dto.Email,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now,
-                IsActive = false
+                IsActive = true
             };
 
             //Hash Password
@@ -105,10 +105,12 @@ namespace BlogAPI.Services
         }
 
         public async Task<User?> ValidateUserAsync(string username, string password)
-        {
+        {   
+            //searches the Users table in the database for a record with the given username.
             var user = await _db.Users.FirstOrDefaultAsync(u => u.Username == username);
             if (user == null) return null;
 
+            //VerifyHashedPassword checks if the plain text password, when hashed, matches the stored hash.
             var result = _passwordHasher.VerifyHashedPassword(user, user.Password, password);
             return result == PasswordVerificationResult.Success ? user : null;
         }

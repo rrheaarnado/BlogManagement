@@ -29,36 +29,35 @@ async function http(path, options = {}) {
 
 export const api = {
 
-    login: (credentials) =>
-        http("/api/Auth/login", {
-            method: "POST",
-            body: JSON.stringify(credentials),
-        }),
+  login: (credentials) =>
+    http("/api/Auth/login", {
+      method: "POST",
+      body: JSON.stringify(credentials),
+    }),
 
+  //Users
+  getUsers: () => http("/api/Users"),
+  getUser: (userId) => http(`/api/Users/${userId}`),
+  createUser: (user) => http("/api/Users", { method: "POST", body: JSON.stringify(user) }),
+  updateUser: (id, user) => http(`/api/Users/${id}`, { method: "PUT", body: JSON.stringify(user) }),
+  deleteUser: (id) => http(`/api/Users/${id}`, { method: "DELETE" }),
 
-    //Users
-    getUsers: () => http("/api/Users"),
-    getUser: (userId) => http(`/api/Users/${userId}`),
-    createUser: (user) => http("/api/Users", { method: "POST", body: JSON.stringify(user) }),
-    updateUser: (id, user) => http(`/api/Users/${id}`, { method: "PUT", body: JSON.stringify(user) }),
-    deleteUser: (id) => http(`/api/Users/${id}`, { method: "DELETE" }),
+  //Posts
+  getPosts: () => http("/api/Posts"),
+  getPost: (id) => http(`/api/Posts/${id}`),
+  createPost: (post) => http("/api/Posts", { method: "POST", body: JSON.stringify(post) }),
+  updatePost: (id, post) => http(`/api/Posts/${id}`, { method: "PUT", body: JSON.stringify(post) }),
+  deletePost: (id) =>
+    http(`/api/Posts/${id}`, { method: "DELETE" }),
 
-    //Posts
-    getPosts: () => http("/api/Posts"),
-    getPost: (id) => http(`/api/Posts/${id}`),
-    createPost: (post) => http("/api/Posts", { method: "POST", body: JSON.stringify(post) }),
-    updatePost: (id, post) => http(`/api/Posts/${id}`, { method: "PUT", body: JSON.stringify(post) }),
-    deletePost: (id, userId) =>
-        http(`/api/Posts/${id}?userId=${userId}`, { method: "DELETE" }),
-
-    //Comments
-    getCommentsByPost: (postId) => http(`/api/comments/post/${postId}`),
-    getComments: () => http("/api/Comments"),
-    getComment: (id) => http(`/api/Comment/${id}`),
-    createComment: (comment) => http("/api/Comments", { method: "POST", body: JSON.stringify(comment) }),
-    updateComment: (id, comment) => http(`/api/Comments/${id}`, { method: "PUT", body: JSON.stringify(comment) }),
-    deleteComment: (id, userId) =>
-        http(`/api/Comments/${id}?userId=${userId}`, { method: "DELETE" }),
+  //Comments
+  getCommentsByPost: (postId) => http(`/api/comments/post/${postId}`),
+  getComments: () => http("/api/Comments"),
+  getComment: (id) => http(`/api/Comment/${id}`),
+  createComment: (commentDto) => http("/api/Comments", {method: "POST",body: JSON.stringify(commentDto),}),
+  updateComment: (id, comment) => http(`/api/Comments/${id}`, { method: "PUT", body: JSON.stringify(comment) }),
+  deleteComment: (id, userId) =>
+    http(`/api/Comments/${id}?userId=${userId}`, { method: "DELETE" }),
 
 
 };

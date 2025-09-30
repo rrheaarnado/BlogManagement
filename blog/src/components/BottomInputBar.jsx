@@ -39,7 +39,6 @@ const FloatingBottomBar = ({ onAdd, onSearch }) => {
         title,
         content,
         isPublished: true,
-        userId: Number(auth.userId),
       });
 
       setTitle("");
