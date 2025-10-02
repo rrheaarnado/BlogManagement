@@ -29,8 +29,15 @@ async function http(path, options = {}) {
 
 export const api = {
 
+  //authentication
   login: (credentials) =>
     http("/api/Auth/login", {
+      method: "POST",
+      body: JSON.stringify(credentials),
+    }),
+
+  register: (credentials) =>
+    http("/api/Auth/register", {
       method: "POST",
       body: JSON.stringify(credentials),
     }),
@@ -54,7 +61,7 @@ export const api = {
   getCommentsByPost: (postId) => http(`/api/comments/post/${postId}`),
   getComments: () => http("/api/Comments"),
   getComment: (id) => http(`/api/Comment/${id}`),
-  createComment: (commentDto) => http("/api/Comments", {method: "POST",body: JSON.stringify(commentDto),}),
+  createComment: (commentDto) => http("/api/Comments", { method: "POST", body: JSON.stringify(commentDto), }),
   updateComment: (id, comment) => http(`/api/Comments/${id}`, { method: "PUT", body: JSON.stringify(comment) }),
   deleteComment: (id, userId) =>
     http(`/api/Comments/${id}?userId=${userId}`, { method: "DELETE" }),

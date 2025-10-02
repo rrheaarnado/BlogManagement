@@ -57,7 +57,8 @@ namespace BlogAPI.Services
                 UserId = c.UserId,
                 Username = c.User != null ? c.User.Username : "Unknown",
                 PostId = c.PostId,
-                CreatedAt = c.CreatedAt
+                CreatedAt = c.CreatedAt,
+                UpdatedAt = c.UpdatedAt,
             })
             .ToListAsync();
 
@@ -100,7 +101,6 @@ namespace BlogAPI.Services
             if (comment == null) return false;
 
             comment.Content = dto.Content;
-
             comment.UpdatedAt = DateTime.Now;
 
             await _db.SaveChangesAsync();

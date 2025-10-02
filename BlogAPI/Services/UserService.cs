@@ -104,8 +104,9 @@ namespace BlogAPI.Services
             return true;
         }
 
+        //Validations
         public async Task<User?> ValidateUserAsync(string username, string password)
-        {   
+        {
             //searches the Users table in the database for a record with the given username.
             var user = await _db.Users.FirstOrDefaultAsync(u => u.Username == username);
             if (user == null) return null;
@@ -114,5 +115,11 @@ namespace BlogAPI.Services
             var result = _passwordHasher.VerifyHashedPassword(user, user.Password, password);
             return result == PasswordVerificationResult.Success ? user : null;
         }
+
+        public async Task<User?> GetUserByUsernameAsync(string username)
+        {
+            return await _db.Users.FirstOrDefaultAsync(u => u.Username == username);
+        }
+
     }
 }

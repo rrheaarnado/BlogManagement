@@ -56,7 +56,7 @@ namespace BlogAPI.Controllers
             return CreatedAtAction(nameof(GetById), new { id = post.Id }, post);
         }
 
-
+        [Authorize]
         [HttpPut("{id:int}")]
         public async Task<ActionResult> Update(int id, UpdatePostDto dto)
         {

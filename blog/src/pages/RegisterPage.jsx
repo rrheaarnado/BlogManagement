@@ -18,8 +18,8 @@ const RegisterPage = () => {
     setSuccess("");
 
     try {
-      const res = await api.createUser({ username, email, password });
-      setSuccess("Registered successfully! You can now login.");
+      const res = await api.register({ username, email, password });
+      setSuccess("Registered successfully! You can now login.");  
       setTimeout(() => navigate("/login"), 1500);
     } catch (err) {
       console.error(err);

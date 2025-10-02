@@ -7,8 +7,8 @@ const StatusModal = ({ isOpen, onClose, title, message, type }) => {
     // Colors depending on success or error
     const colorClasses =
         type === "success"
-            ? "bg-white text-red-600  border-gray-400"
-            : "bg-white text-green-600 border-gray-400";
+            ? "bg-white text-green-600  border-gray-400"
+            : "bg-white text-red-600 border-gray-400";
 
     return (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">

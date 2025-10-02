@@ -129,7 +129,7 @@ namespace BlogAPI.Services
 
         public async Task<bool> UpdateAsync(int id, UpdatePostDto dto)
         {
-            var post = await _db.Posts.FindAsync();
+            var post = await _db.Posts.FindAsync(id);
             if (post == null) return false;
 
             post.Title = dto.Title;

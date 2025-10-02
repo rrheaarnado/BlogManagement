@@ -13,6 +13,9 @@ namespace BlogAPI.Services.Interfaces //Defines the contract (what methods does 
         Task<bool> UpdateAsync(int id, UpdateUserDto dto);
         Task<bool> DeleteAsync(int id);
 
+        //Validations
         Task<User?> ValidateUserAsync(string username, string password);
+        Task<User?> GetUserByUsernameAsync(string username);
+
     }
 }

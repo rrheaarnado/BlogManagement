@@ -41,32 +41,35 @@ namespace BlogAPI.Controllers
         }
 
         [Authorize]
-[HttpPost]
-public async Task<ActionResult<CommentDto>> Create(CreateCommentDto dto)
-{
-    var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)
-                      ?? User.FindFirst("nameid");
-    if (userIdClaim == null)
-        return Unauthorized("User ID claim missing in token");
+        [HttpPost]
+        public async Task<ActionResult<CommentDto>> Create(CreateCommentDto dto)
+        {
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)
+                              ?? User.FindFirst("nameid");
+            if (userIdClaim == null)
+                return Unauthorized("User ID claim missing in token");
 
-    var userId = int.Parse(userIdClaim.Value);
+            var userId = int.Parse(userIdClaim.Value);
 
-    var comment = await _commentService.CreateAsync(dto, userId, dto.PostId);
+            var comment = await _commentService.CreateAsync(dto, userId, dto.PostId);
 
-    return CreatedAtAction(nameof(GetById), new { id = comment.Id }, comment);
-}
+            return CreatedAtAction(nameof(GetById), new { id = comment.Id }, comment);
+        }
 
-
-        [HttpPut("{id:int}")] //UPDATE /api/comments/{id}
-        public async Task<ActionResult> Update(int id, UpdateCommentDto dto)
+        [Authorize]
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult<CommentDto>> Update(int id, UpdateCommentDto dto)
         {
             var comment = await _commentService.UpdateAsync(id, dto);
             if (comment == null) return NotFound();
 
-            return NoContent();
+            return Ok(comment); // return updated comment DTO
         }
 
-         [HttpDelete("{id:int}")]
+
+
+        [Authorize]
+        [HttpDelete("{id:int}")]
         public async Task<ActionResult> Delete(int id, [FromQuery] int userId)
         {
             var success = await _commentService.DeleteAsync(id, userId);
