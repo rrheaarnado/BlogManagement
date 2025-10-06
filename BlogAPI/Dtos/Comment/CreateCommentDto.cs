@@ -6,7 +6,7 @@ namespace BlogAPI.Dtos.Comment
     {
 
         [Required]
-        public string Content { get; set; }  = string.Empty;
+        public string Content { get; set; } = "";
 
         [Required]
         public int UserId { get; set; }

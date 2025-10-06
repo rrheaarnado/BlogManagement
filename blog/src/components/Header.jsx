@@ -16,7 +16,7 @@ const Header = () => {
           return;
         }
 
-        const user = await api.getUser(auth.userId, auth.token);
+        const user = await api.getUser(auth.userId);
         if (user?.username) {
           setUsername(user.username);
         } else {

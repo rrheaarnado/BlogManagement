@@ -74,15 +74,14 @@ const PostDetails = () => {
   const handleSaveEdit = async () => {
 
     if (!stripHtml(editData.title).trim() || !stripHtml(editData.content).trim()) {
-  setModal({
-    isOpen: true,
-    type: "error",
-    title: "Validation Error",
-    message: "Title and content cannot be empty.",
-  });
-  return;
-}
-
+      setModal({
+        isOpen: true,
+        type: "error",
+        title: "Validation Error",
+        message: "Title and content cannot be empty.",
+      });
+      return;
+    }
 
     try {
       await api.updatePost(post.id, { title: editData.title, content: editData.content });

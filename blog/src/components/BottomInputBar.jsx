@@ -60,7 +60,7 @@ const FloatingBottomBar = ({ onAdd, onSearch }) => {
     if (!title.trim() || !content.trim()) return;
 
     try {
-
+      //Create New Post
       await api.createPost({
         title,
         content,

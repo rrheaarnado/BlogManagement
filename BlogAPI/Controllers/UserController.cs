@@ -49,7 +49,7 @@ namespace BlogAPI.Controllers
         public async Task<ActionResult> Update(int id, UpdateUserDto dto)
         {
             var user = await _userService.UpdateAsync(id, dto);
-            if (user == null) return NotFound();
+            if (!user) return NotFound();
 
             return NoContent();
         }
@@ -58,8 +58,8 @@ namespace BlogAPI.Controllers
         public async Task<ActionResult> Delete(int id)
         {
             //Check if id exist
-            var user = await _userService.DeleteAsync(id);
-            if (user == null) return NotFound();
+            var deleted = await _userService.DeleteAsync(id);
+            if (!deleted) return NotFound();
 
             return NoContent();
         }

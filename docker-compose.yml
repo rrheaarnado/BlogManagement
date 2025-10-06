@@ -1,0 +1,47 @@
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: as_db
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "AS_password2025!"
+      MSSQL_PID: "Express" #Lightweight, free edition with some limitations (max DB size 10 GB)
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql-data:/var/opt/mssql
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P AS_password2025! -Q \"SELECT 1\" || exit 1"]
+      interval: 10s
+      retries: 10
+
+  backend:
+    build:
+      context: ./BlogAPI  
+    image: as_backend
+    container_name: backend-as
+    ports:
+      - "5205:5205"
+    depends_on:
+      - db
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=as_db;Database=BlogDb;User Id=sa;Password=AS_password2025!;TrustServerCertificate=True;
+      - ASPNETCORE_ENVIRONMENT=Development
+      - JWT_SECRET=AnnouncementSystemSecretKeyForJWT2025
+    
+  frontend:
+    build:
+      context: ./blog
+    image: as_frontend
+    container_name: frontend-as
+    ports: 
+      - "5173:5173"
+    depends_on:
+      - backend
+
+volumes:
+  mssql-data:
+
+#docker compose up --build
+#docker compose down -v
+#docker compose build --no-cache

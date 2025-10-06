@@ -1,15 +1,17 @@
 const BASE_URL = import.meta.env.VITE_API_URL; //gets BASE_URL from env.
 
 async function http(path, options = {}) {
+
   // Get token from localStorage if available
   const auth = JSON.parse(localStorage.getItem("auth"));
   const token = auth?.token;
 
+  //Fetch Request
   const res = await fetch(`${BASE_URL}${path}`, {
     headers: {
       "Content-Type": "application/json",
       ...(options.headers || {}),
-      ...(token ? { Authorization: `Bearer ${token}` } : {}), // add token if exists
+      ...(token ? { Authorization: `Bearer ${token}` } : {}), 
     },
     ...options,
   });
@@ -29,18 +31,9 @@ async function http(path, options = {}) {
 
 export const api = {
 
-  //authentication
-  login: (credentials) =>
-    http("/api/Auth/login", {
-      method: "POST",
-      body: JSON.stringify(credentials),
-    }),
-
-  register: (credentials) =>
-    http("/api/Auth/register", {
-      method: "POST",
-      body: JSON.stringify(credentials),
-    }),
+  //Authentication
+  login: (credentials) => http("/api/Auth/login", { method: "POST", body: JSON.stringify(credentials),}),
+  register: (credentials) => http("/api/Auth/register", {method: "POST",body: JSON.stringify(credentials),}),
 
   //Users
   getUsers: () => http("/api/Users"),

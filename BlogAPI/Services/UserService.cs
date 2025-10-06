@@ -3,7 +3,7 @@ using BlogAPI.Services.Interfaces;
 using BlogAPI.Dtos.User;
 using Microsoft.EntityFrameworkCore;
 using BlogAPI.Models;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity; //For password hashing
 
 namespace BlogAPI.Services
 {

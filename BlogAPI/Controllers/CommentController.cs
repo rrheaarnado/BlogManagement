@@ -15,8 +15,8 @@ namespace BlogAPI.Controllers
         private readonly ICommentService _commentService;
         public CommentsController(ICommentService commentService) => _commentService = commentService;
 
-        [HttpGet] //READ ALL: GET /api/comments
-        public async Task<ActionResult<IEnumerable<Comment>>> GetAll()
+        [HttpGet] 
+        public async Task<ActionResult<IEnumerable<CommentDto>>> GetAll()
         {
             var comment = await _commentService.GetAllAsync();
 
@@ -24,7 +24,7 @@ namespace BlogAPI.Controllers
         }
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<Comment>> GetById(int id)
+        public async Task<ActionResult<CommentDto>> GetById(int id)
         {
             var comment = await _commentService.GetByIdAsync(id);
             if (comment == null) return NotFound();
@@ -32,7 +32,6 @@ namespace BlogAPI.Controllers
             return Ok(comment);
         }
 
-        //
         [HttpGet("post/{postId:int}")]
         public async Task<ActionResult<IEnumerable<CommentDto>>> GetCommentsByPost(int postId)
         {
@@ -44,6 +43,7 @@ namespace BlogAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<CommentDto>> Create(CreateCommentDto dto)
         {
+            //finds the user id claim from the JWT token
             var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)
                               ?? User.FindFirst("nameid");
             if (userIdClaim == null)
@@ -61,19 +61,17 @@ namespace BlogAPI.Controllers
         public async Task<ActionResult<CommentDto>> Update(int id, UpdateCommentDto dto)
         {
             var comment = await _commentService.UpdateAsync(id, dto);
-            if (comment == null) return NotFound();
+            if (!comment) return NotFound();
 
-            return Ok(comment); // return updated comment DTO
+            return Ok(comment);
         }
-
-
 
         [Authorize]
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> Delete(int id, [FromQuery] int userId)
         {
             var success = await _commentService.DeleteAsync(id, userId);
-            if (!success) return Forbid(); // or Unauthorized
+            if (!success) return Forbid();
             return NoContent();
         }
 

@@ -25,7 +25,7 @@ namespace BlogAPI.Controllers
         }
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<Post>> GetById(int id)
+        public async Task<ActionResult<PostDto>> GetById(int id)
         {
             var post = await _postService.GetByIdAsync(id);
             if (post == null) return NotFound();
@@ -35,24 +35,20 @@ namespace BlogAPI.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult<Post>> Create(CreatePostDto dto)
+        public async Task<ActionResult<PostDto>> Create(CreatePostDto dto)
         {
-            // 1. Look for the logged-in user’s ID in the JWT claims
+            //Look for the logged-in user’s ID in the JWT claims
             var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)
                               ?? User.FindFirst("nameid");
-            // 2. If no claim found, block the request
             if (userIdClaim == null)
                 return Unauthorized("User ID claim missing in token");
 
-            // 3. Convert the claim value (string) into an integer userId
+            //Convert the claim value (string) into an integer userId
             var userId = int.Parse(userIdClaim.Value);
 
-            // 4. Call the service layer to actually create the post,
-            //passing in the post data (dto) and the userId
+            //pass the userId to the service layer
             var post = await _postService.CreateAsync(dto, userId);
 
-            // 5. Return a 201 Created response with a Location header
-            //pointing to the new post’s GetById endpoint
             return CreatedAtAction(nameof(GetById), new { id = post.Id }, post);
         }
 
@@ -60,8 +56,8 @@ namespace BlogAPI.Controllers
         [HttpPut("{id:int}")]
         public async Task<ActionResult> Update(int id, UpdatePostDto dto)
         {
-            var post = await _postService.UpdateAsync(id, dto);
-            if (post == null) return NotFound();
+            var success = await _postService.UpdateAsync(id, dto);
+            if (!success) return NotFound();
 
             return NoContent();
         }
@@ -72,7 +68,6 @@ namespace BlogAPI.Controllers
         {
             var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)
                               ?? User.FindFirst("nameid");
-
             if (userIdClaim == null)
                 return Unauthorized("User ID claim missing in token");
 

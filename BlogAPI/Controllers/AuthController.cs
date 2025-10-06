@@ -10,6 +10,7 @@ using System.Text;                               // For Encoding
 using System.Security.Claims;                    // For Claim, ClaimsIdentity, ClaimTypes
 using Microsoft.IdentityModel.Tokens;            // For SymmetricSecurityKey, SigningCredentials, SecurityAlgorithms
 using System.IdentityModel.Tokens.Jwt;           // For JwtSecurityTokenHandler, SecurityTokenDescriptor
+using Microsoft.AspNetCore.Identity;            // For PasswordHasher<User>
 
 namespace BlogAPI.Controllers
 {
@@ -30,23 +31,23 @@ namespace BlogAPI.Controllers
                 return Unauthorized(new { message = "Invalid username or password" });
 
             // -------------------- JWT Creation --------------------
-            var key = Encoding.UTF8.GetBytes("ThisIsASuperSecretKeyForJWT1234567890");
-            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.UTF8.GetBytes("AnnouncementSysytemSecretKey2025");
+            var tokenHandler = new JwtSecurityTokenHandler();                       //responsible for creating, encoding, and decoding JWT tokens.
+
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[]
+                Subject = new ClaimsIdentity(new[]                                  //claims (data) inside JWT
                 {
-                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                    new Claim(ClaimTypes.Name, user.Username)
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),       //user's unique ID
+                    new Claim(ClaimTypes.Name, user.Username)                       //username
                 }),
-                Expires = DateTime.UtcNow.AddHours(1),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                Expires = DateTime.UtcNow.AddHours(1),                              //token expiration time
+
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature) //signs the token using the key
             };
 
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            var jwtToken = tokenHandler.WriteToken(token);
-
-            // ------------------------------------------------------
+            var token = tokenHandler.CreateToken(tokenDescriptor);                 //uses the descriptor to create the token
+            var jwtToken = tokenHandler.WriteToken(token);                         //converts token to a string format           
 
             // Return user info + JWT
             return Ok(new { username = user.Username, userId = user.Id, token = jwtToken });

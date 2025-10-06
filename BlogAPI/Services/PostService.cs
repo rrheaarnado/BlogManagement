@@ -27,9 +27,9 @@ namespace BlogAPI.Services
                     Id = p.Id,
                     Title = p.Title,
                     Content = p.Content,
-                    IsPublished = p.IsPublished,
-                    CreatedAt = p.CreatedAt,
-                    UpdatedAt = p.UpdatedAt,
+                    IsPublished = true,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt =DateTime.Now,
                     UserId = p.UserId,
                     User = new UserDto
                     {
@@ -64,7 +64,6 @@ namespace BlogAPI.Services
                 .Include(p => p.User)
                 .Include(p => p.Comments)
                 .FirstOrDefaultAsync(p => p.Id == id);
-
             if (post == null) return null;
 
             return new PostDto
@@ -72,7 +71,7 @@ namespace BlogAPI.Services
                 Id = post.Id,
                 Title = post.Title,
                 Content = post.Content,
-                IsPublished = post.IsPublished,
+                IsPublished = true,
                 CreatedAt = post.CreatedAt,
                 UpdatedAt = post.UpdatedAt,
                 UserId = post.UserId,
@@ -82,8 +81,8 @@ namespace BlogAPI.Services
                     Id = post.User.Id,
                     Username = post.User.Username,
                     Email = post.User.Email,
-                    CreatedAt = post.User.CreatedAt,
-                    UpdatedAt = post.User.UpdatedAt,
+                    CreatedAt = post.CreatedAt,
+                    UpdatedAt = post.UpdatedAt,
                     IsActive = post.User.IsActive
                 } : null,
                 Comments = post.Comments.Select(c => new CommentDto
@@ -98,14 +97,13 @@ namespace BlogAPI.Services
             };
         }
 
-
         public async Task<PostDto> CreateAsync(CreatePostDto dto, int userId)
         {
             var post = new Post
             {
                 Title = dto.Title,
                 Content = dto.Content,
-                IsPublished = dto.IsPublished,
+                IsPublished = true,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now,
                 UserId = userId
@@ -121,7 +119,7 @@ namespace BlogAPI.Services
                 Id = post.Id,
                 Title = post.Title,
                 Content = post.Content,
-                IsPublished = post.IsPublished,
+                IsPublished = true,
                 UserId = post.UserId,
                 Username = user?.Username ?? "Unknown"
             };

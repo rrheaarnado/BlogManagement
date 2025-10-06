@@ -11,10 +11,11 @@ namespace BlogAPI.Services
         private readonly AppDbContext _db;
         public CommentService(AppDbContext db) => _db = db;
 
+        //Convert all comments in the database as CommentDto - returning actual database model might contain sensitive data
         public async Task<IEnumerable<CommentDto>> GetAllAsync()
         {
             var comments = await _db.Comments
-            .Include(c => c.User)
+            .Include(c => c.User) // include related user's data (e.g., username)
             .Select(c => new CommentDto
             {
                 Id = c.Id,
@@ -26,7 +27,6 @@ namespace BlogAPI.Services
                 UpdatedAt = c.UpdatedAt
             })
             .ToListAsync();
-
 
             return comments;
         }
@@ -45,6 +45,7 @@ namespace BlogAPI.Services
             };
         }
 
+        //returns a list of comments(commentdto) that belongs to a specific post
         public async Task<IEnumerable<CommentDto>> GetByPostIdAsync(int postId)
         {
             return await _db.Comments
@@ -61,7 +62,6 @@ namespace BlogAPI.Services
                 UpdatedAt = c.UpdatedAt,
             })
             .ToListAsync();
-
         }
 
         public async Task<CommentDto> CreateAsync(CreateCommentDto dto, int userId, int postId)
@@ -92,7 +92,6 @@ namespace BlogAPI.Services
                 CreatedAt = savedComment.CreatedAt,
                 UpdatedAt = savedComment.UpdatedAt
             };
-
         }
 
         public async Task<bool> UpdateAsync(int id, UpdateCommentDto dto)
@@ -121,9 +120,5 @@ namespace BlogAPI.Services
 
             return true;
         }
-
-
-
-
     }
 }
