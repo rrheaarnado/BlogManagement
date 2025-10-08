@@ -57,10 +57,10 @@ function HomePage() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
-      <div className="flex flex-col md:flex-row flex-1 mt-4">
+      {/* <Header /> */}
+      <div className="flex flex-col md:flex-row flex-1">
         {/* Sidebar */}
-        <div className="w-20 flex-shrink-0 sticky h-[calc(100vh-100px)] p-5 ml-5">
+        <div className="">
           <Sidebar onFilterChange={setFilter} />
         </div>
 
