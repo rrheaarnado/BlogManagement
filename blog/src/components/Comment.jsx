@@ -30,7 +30,6 @@ const Comment = ({ postId, currentUser }) => {
   const fetchComments = async () => {
     try {
       const data = await api.getCommentsByPost(postId);
-      console.log("Fetched comments:", data);
       setComments(data);
     } catch (err) {
       console.error("Failed to fetch comments:", err);
@@ -86,7 +85,7 @@ const Comment = ({ postId, currentUser }) => {
     }
 
     try {
-      await api.updateComment(isEditingId, { content: editData.content });
+      await api.updateComment(isEditingId, { content: editData.content }, currentUser.userId);
 
       setComments((prev) =>
         prev.map((c) =>

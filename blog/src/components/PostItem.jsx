@@ -6,7 +6,7 @@ import StarterKit from "@tiptap/starter-kit";
 
 const PostItem = ({ post, user, fullWidth = false }) => {
   return (
-    <div className={`${fullWidth ? "w-full" : "w-2/3 mx-auto"} rounded-lg shadow-lg mt-3 p-4 mb-1 bg-white text-black border border-gray-100`}>
+    <div className={`w-full rounded-lg shadow-md p-4 bg-white text-black border border-gray-300`}>
       {/* Header: Title and Time */}
       <div className="flex justify-between items-start">
         <h2 className="text-lg font-bold">{post.title}</h2>

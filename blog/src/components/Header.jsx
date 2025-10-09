@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import { UserIcon } from "@heroicons/react/24/solid";
 import { useNavigate } from "react-router-dom";
 import { api } from "../api";
+import logo from "../assets/ncast-logo.png";
+import { BellAlertIcon, Cog6ToothIcon } from "@heroicons/react/24/outline";
+
 
 const Header = () => {
   const [username, setUsername] = useState("");
@@ -35,12 +38,12 @@ const Header = () => {
   }, [navigate]);
 
   return (
-    <header className="bg-black text-white sticky top-0 z-50 shadow-md">
-      <div className="container mx-auto flex justify-between items-center py-4 px-6">
-        <div>Announcements</div>
-        <div className="flex items-center hidden md:flex gap-1">
-          <UserIcon className="w-5 h-5" /> {username ? username : "User Login"}
+    <header className="bg-black text-white sticky top-0 z-50 shadow-md py-3">
+      <div className="container flex justify-between items-center">
+        <div className="flex justify-center gap-2 ml-4 items-center">
+          <span className="font-semibold text-2xl px-5">NCast</span>
         </div>
+
       </div>
     </header>
   );

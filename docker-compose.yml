@@ -27,8 +27,7 @@ services:
     environment:
       - ConnectionStrings__DefaultConnection=Server=as_db;Database=BlogDb;User Id=sa;Password=AS_password2025!;TrustServerCertificate=True;
       - ASPNETCORE_ENVIRONMENT=Development
-      - JWT_SECRET=AnnouncementSystemSecretKeyForJWT2025
-    
+      
   frontend:
     build:
       context: ./blog

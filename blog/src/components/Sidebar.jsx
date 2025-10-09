@@ -1,122 +1,75 @@
 import React from "react";
-import { HomeIcon, BellIcon, DocumentTextIcon, ArrowRightOnRectangleIcon, Bars2Icon, Bars3Icon, BellAlertIcon, DocumentDuplicateIcon, ArrowRightCircleIcon } from "@heroicons/react/24/outline";
+import {
+    UserCircleIcon,
+    DocumentDuplicateIcon,
+    BellAlertIcon,
+    Cog6ToothIcon,
+    ArrowRightOnRectangleIcon
+} from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
-import { UserIcon } from "@heroicons/react/24/solid";
-import { useState} from "react";
+import logo from "../assets/ncast-logo.png";
 
-const Sidebar = ({ onFilterChange, onLogout }) => {
-
-    const navigate = useNavigate(); 
-    const [isOpen, SetIsOpen] = useState(true);
+const Sidebar = ({ onFilterChange }) => {
+    const navigate = useNavigate();
 
     const handleLogout = () => {
-        localStorage.removeItem("auth"); // remove JWT/user info
-        navigate("/"); // go to login
+        localStorage.removeItem("auth");
+        navigate("/");
     };
-    return (
-        <div 
-            className={`min-h-screen px-4 py-5 bg-black text-white border border-black m-0 shadow-md transition-all duration-300 ease-in-out
-            ${isOpen ? "w-60 px-4 py-5" : "w-15 px-2 py-3 items-center"}`}>
 
-            {/*Icons inside Sidebar*/}
-            <div className="flex mb-10 gap-2">  
-                {isOpen}
-                <Bars3Icon 
-                className="w-6 h-6"
-                onClick={() => SetIsOpen(!isOpen)} 
-                /> 
+    return (
+        <div className="flex flex-col justify-between h-full w-60 px-1 py-3 bg-black text-white shadow-md">
+            
+            {/* Top Section */}
+            <div>
+                <div className="flex mb-10 px-4">
+                     <span className="font-bold text-2xl">NCast</span>
+                    </div>
+                <ul className="flex flex-col space-y-1">
+                    <li
+                        className="flex items-center gap-2 cursor-pointer hover:bg-white hover:text-black rounded-lg py-3 px-2 transition-all duration-150"
+                        onClick={() => onFilterChange("profile")}
+                    >
+                        <UserCircleIcon className="w-6 h-6" />
+                        <span>Profile</span>
+                    </li>
+
+                    <li
+                        className="flex items-center gap-2 cursor-pointer hover:bg-white hover:text-black rounded-lg py-3 px-2 transition-all duration-150"
+                        onClick={() => onFilterChange("announcements")}
+                    >
+                        <DocumentDuplicateIcon className="w-6 h-6" />
+                        <span>Announcements</span>
+                    </li>
+
+                    <li
+                        className="flex items-center gap-2 cursor-pointer hover:bg-white hover:text-black rounded-lg py-3 px-2 transition-all duration-150"
+                        onClick={() => onFilterChange("notifications")}
+                    >
+                        <BellAlertIcon className="w-6 h-6" />
+                        <span>Notifications</span>
+                    </li>
+
+                    <li
+                        className="flex items-center gap-2 cursor-pointer hover:bg-white hover:text-black rounded-lg py-3 px-2 transition-all duration-150"
+                        onClick={() => onFilterChange("settings")}
+                    >
+                        <Cog6ToothIcon className="w-6 h-6" />
+                        <span>Logs</span>
+                    </li>
+                </ul>
             </div>
 
-            <ul className={`space-y-7 ${!isOpen     ? "flex flex-col items-center" : ""}`}>
-
+            {/* Logout pinned at bottom */}
+            <div>
                 <li
-                className="flex items-stretch gap-2 cursor-pointer mb-15">
-                    {isOpen ? (
-                        <>
-                            <UserIcon className="w-8 h-8 font-bold" />
-                            <span className="font-bold text-lg self-end">Welcome, User</span>
-                        </>
-                    ) : (
-                            <UserIcon className="w-7 h-7" />    
-                    )}
-                    
-                </li>
-
-                 <li
-                    className="flex items-center gap-2 cursor-pointer hover:text-gray-300"
-                    onClick={() => onFilterChange("all")}
-                >
-                    {isOpen ? (
-                        <>
-                            <HomeIcon className="w-6 h-6" />
-                            <span>Dashboard</span>
-                        </>
-                    ) : (
-                            <HomeIcon className="w-7 h-7" />    
-                    )}
-                </li>
-                    
-                <li
-                    className="flex items-center gap-2 cursor-pointer hover:text-gray-300"
-                    onClick={() => onFilterChange("all")}
-                >
-                    {isOpen ? (
-                        <>
-                            <DocumentDuplicateIcon className="w-6 h-6" />
-                            <span>All Announcements</span>
-                        </>
-                    ) : (
-                            <DocumentDuplicateIcon className="w-7 h-7" />    
-                    )}
-                </li>
-
-                <li className="flex items-center gap-2 cursor-pointer hover:text-gray-300"
-                    onClick={() => onFilterChange("my")}
-                >
-                    {isOpen ? (
-                        <>
-                            <DocumentTextIcon className="w-5 h-5" />
-                            <span>My Announcements</span>
-                        </>
-                    ) : (
-                            <DocumentTextIcon className="w-7 h-7" />
-                    )}
-                </li>
-
-                <li className="flex items-center gap-2 cursor-pointer hover:text-gray-300"
-                    onClick={() => onFilterChange()}
-                >
-                    {isOpen ? (
-                        <>
-                            <BellAlertIcon className="w-5 h-5" />
-                            <span>Notifications</span>
-                        </>
-                    ) : (
-                            <BellAlertIcon className="w-7 h-7" />
-                    )}
-                  
-                </li>
-                {/* <li className="flex items-center gap-2 cursor-pointer hover:text-gray-600">
-                    <BellIcon className="w-5 h-5" /> Notifications
-                </li> */}
-                <div className="absolute bottom-0 mb-5">
-                    <li
-                    className="flex items-center bottom-0 gap-2 cursor-pointer hover:text-gray-300"
+                    className="flex items-center gap-2 cursor-pointer hover:bg-white hover:text-black rounded-lg py-2 px-2 transition-all duration-150"
                     onClick={handleLogout}
                 >
-                
-                    {isOpen ? (
-                        <>
-                        <ArrowRightOnRectangleIcon className="w-7 h-7" /> 
-                        <span>Logout</span>
-                        </>
-                    ) : (
-                            <ArrowRightOnRectangleIcon className="w-7 h-7" />    
-                    )}
-
+                    <ArrowRightOnRectangleIcon className="w-6 h-6" />
+                    <span>Logout</span>
                 </li>
-                </div>
-            </ul>
+            </div>
         </div>
     );
 };

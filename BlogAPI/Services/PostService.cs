@@ -21,6 +21,8 @@ namespace BlogAPI.Services
         {
             var post = await _db.Posts
                 .Include(p => p.User)
+                .OrderByDescending(p => p.CreatedAt)
+                .ThenByDescending(p => p.UpdatedAt)
                 .Include(p => p.Comments)
                 .Select(p => new PostDto
                 {
@@ -28,8 +30,8 @@ namespace BlogAPI.Services
                     Title = p.Title,
                     Content = p.Content,
                     IsPublished = true,
-                    CreatedAt = DateTime.Now,
-                    UpdatedAt =DateTime.Now,
+                    CreatedAt = p.CreatedAt,
+                    UpdatedAt = p.UpdatedAt,
                     UserId = p.UserId,
                     User = new UserDto
                     {
@@ -125,7 +127,7 @@ namespace BlogAPI.Services
             };
         }
 
-        public async Task<bool> UpdateAsync(int id, UpdatePostDto dto)
+        public async Task<bool> UpdateAsync(int id, UpdatePostDto dto, int userId)
         {
             var post = await _db.Posts.FindAsync(id);
             if (post == null) return false;

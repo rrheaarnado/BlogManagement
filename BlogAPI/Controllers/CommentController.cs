@@ -58,9 +58,9 @@ namespace BlogAPI.Controllers
 
         [Authorize]
         [HttpPut("{id:int}")]
-        public async Task<ActionResult<CommentDto>> Update(int id, UpdateCommentDto dto)
+        public async Task<ActionResult<CommentDto>> Update(int id, UpdateCommentDto dto, int userId)
         {
-            var comment = await _commentService.UpdateAsync(id, dto);
+            var comment = await _commentService.UpdateAsync(id, dto, userId);
             if (!comment) return NotFound();
 
             return Ok(comment);

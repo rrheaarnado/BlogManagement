@@ -10,6 +10,7 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 //Secret key for signing tokens
 
+var jwtSettings = builder.Configuration.GetSection("Jwt");
 var key = Encoding.UTF8.GetBytes("AnnouncementSysytemSecretKey2025"); 
 
 //Add DbContext with SQL Server
@@ -22,19 +23,19 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     {
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateIssuer = false,                                     // Not validating issuer
-            ValidateAudience = false,                                   // Not validating audience
-            ValidateLifetime = true,                                    // Validate token expiration
-            ValidateIssuerSigningKey = true,                            // Validate the signing key
-            IssuerSigningKey = new SymmetricSecurityKey(                // Use the same key as in token generation
+            ValidateIssuer = false,                                         // Not validating issuer
+            ValidateAudience = false,                                       // Not validating audience
+            ValidateLifetime = true,                                        // Validate token expiration
+            ValidateIssuerSigningKey = true,                                // Validate the signing key
+            IssuerSigningKey = new SymmetricSecurityKey(                    // Use the same key as in token generation
                 Encoding.UTF8.GetBytes("AnnouncementSysytemSecretKey2025"))
         };
     });
 
 
-builder.Services.AddControllers();                                      //Controller-related services. (e.g., •	Routing services ([Route("api/[controller]")]), •	[ApiController], [Authorize])
-builder.Services.AddEndpointsApiExplorer();                             //API explorer service for Swagger
-builder.Services.AddSwaggerGen();                                       //Swagger generator
+builder.Services.AddControllers();                                          //Controller-related services. (e.g., •	Routing services ([Route("api/[controller]")]), •	[ApiController], [Authorize])
+builder.Services.AddEndpointsApiExplorer();                                 //API explorer service for Swagger
+builder.Services.AddSwaggerGen();                                           //Swagger generator
 
 //Register Application Services
 builder.Services.AddScoped<IUserService, UserService>();
@@ -65,12 +66,12 @@ builder.Services.AddSwaggerGen(options =>
     // JWT Authorization Header
     options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
     {
-        Name = "Authorization",                                         //header name where token is expected
-        Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,        //Type of security scheme (HTTP Authentication)
-        Scheme = "bearer",                                              //Scheme name 
-        BearerFormat = "JWT",                                           //Format of the bearer token (Json Web Token)
-        In = Microsoft.OpenApi.Models.ParameterLocation.Header,         //Where the token should be sent - in the HTTP header
-        Description = "Enter 'Bearer' [space] and then your token"      //UI input box in swagger
+        Name = "Authorization",                                             //header name where token is expected
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,            //Type of security scheme (HTTP Authentication)
+        Scheme = "bearer",                                                  //Scheme name 
+        BearerFormat = "JWT",                                               //Format of the bearer token (Json Web Token)
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,             //Where the token should be sent - in the HTTP header
+        Description = "Enter 'Bearer' [space] and then your token"          //UI input box in swagger
     });
 
     options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
@@ -106,12 +107,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// Middleware
+// Middlewares
 app.UseCors("AllowFrontend");                                               // Use CORS
 
 app.UseHttpsRedirection();                                                  // 1. Redirect HTTP → HTTPS
 app.UseAuthentication();                                                    // 2. Check JWT/authentication credentials
 app.UseAuthorization();                                                     // 3. Enforce access rules ([Authorize])
-app.MapControllers();                                                       // 4. Maps incoming requests to controller actions
+app.MapControllers();                                                       // 4. Maps incoming requests to controller
 
 app.Run();

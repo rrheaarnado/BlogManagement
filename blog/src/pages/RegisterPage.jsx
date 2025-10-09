@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { api } from "../api";
 import { useNavigate } from "react-router-dom";
+import Header from "../components/Header";
 
 const RegisterPage = () => {
   const [username, setUsername] = useState("");
@@ -31,8 +32,17 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="bg-white border border-gray-100 p-8 rounded-lg shadow-md w-full max-w-md">
+    <div className="min-h-screen ">
+     
+      <div className="flex items-center justify-between">
+      
+      <div className="min-h-screen bg-black text-white justify-center p-8 hidden md:flex flex-col px-60">
+        <span className="text-7xl font-bold">NCast</span>
+        <p>Share and Get timely Announcements with NCast.</p>
+      </div>
+      
+      <div className="flex flex-4 items-center justify-center ">
+        <div className="bg-white border border-gray-100 p-8 rounded-lg shadow-md w-full max-w-md">
         <h1 className="text-2xl font-bold mb-6 text-gray-900 text-center">Register</h1>
 
         <form onSubmit={handleRegister} className="space-y-4">
@@ -95,6 +105,8 @@ const RegisterPage = () => {
           </p>
         </form>
       </div>
+      </div>
+    </div>
     </div>
   );
 };

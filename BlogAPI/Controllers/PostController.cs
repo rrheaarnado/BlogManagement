@@ -56,8 +56,18 @@ namespace BlogAPI.Controllers
         [HttpPut("{id:int}")]
         public async Task<ActionResult> Update(int id, UpdatePostDto dto)
         {
-            var success = await _postService.UpdateAsync(id, dto);
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)
+                              ?? User.FindFirst("nameid");
+            if (userIdClaim == null)
+                return Unauthorized("User ID claim missing in token");
+
+            var userId = int.Parse(userIdClaim.Value);
+
+            var success = await _postService.UpdateAsync(id, dto, userId);
             if (!success) return NotFound();
+
+            if (!success)
+                return Forbid("You are not allowed to delete this post.");
 
             return NoContent();
         }

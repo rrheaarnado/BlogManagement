@@ -94,10 +94,13 @@ namespace BlogAPI.Services
             };
         }
 
-        public async Task<bool> UpdateAsync(int id, UpdateCommentDto dto)
+        public async Task<bool> UpdateAsync(int id, UpdateCommentDto dto, int userId)
         {
             var comment = await _db.Comments.FindAsync(id);
             if (comment == null) return false;
+
+            // Only allow if the user is the owner
+            if (comment.UserId != userId) return false;
 
             comment.Content = dto.Content;
             comment.UpdatedAt = DateTime.Now;

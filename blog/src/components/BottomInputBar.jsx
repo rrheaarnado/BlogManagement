@@ -14,7 +14,6 @@ const FloatingBottomBar = ({ onAdd, onSearch }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
 
-
   const [modal, setModal] = useState({
     isOpen: false,
     title: "",
@@ -41,7 +40,6 @@ const FloatingBottomBar = ({ onAdd, onSearch }) => {
         console.error(err);
       }
     };
-
     fetchResults();
   }, [searchQuery]);
 
@@ -182,7 +180,7 @@ const FloatingBottomBar = ({ onAdd, onSearch }) => {
             className="border border-gray-300 shadow-sm p-2 w-full rounded mb-4 focus:outline-none"
           />
 
-          <div className="flex flex-col gap-2 w-full max-h-[80vh] overflow-y-auto">
+          <div className="flex flex-col gap-2 w-full max-h-[50vh] overflow-y-auto">
             {searchResults.length > 0 ? (
               <PostList posts={searchResults} fullWidth />
             ) : (
