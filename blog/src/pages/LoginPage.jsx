@@ -28,7 +28,7 @@ const LoginPage = () => {
         })
       );
 
-      navigate("/home"); // navigate to protected route
+      navigate("/announcements"); // navigate to protected route
     } catch (err) {
       console.error(err);
       setError("Invalid username or password");
@@ -42,7 +42,7 @@ const LoginPage = () => {
       
       <div className="flex items-center justify-between">
 
-      <div className="min-h-screen bg-black text-white justify-center p-8 hidden md:flex flex-col px-60">
+      <div className="flex min-h-screen bg-black text-white justify-center items-start p-8 hidden md:flex flex-col px-60">
         <span className="text-7xl font-bold">NCast</span>
         <p>Share and Get timely Announcements with NCast.</p>
       </div>

@@ -5,6 +5,7 @@ import { api } from "../api";
 import Comment from "../components/Comment";
 import ActionMenu from "../components/ActionMenu";
 import StatusModal from "../components/StatusModal";
+import Sidebar from "../components/Sidebar";
 
 const PostDetails = () => {
   const { id } = useParams();
@@ -121,7 +122,7 @@ const PostDetails = () => {
         message: "Post deleted successfully!",
       });
       setTimeout(() => {
-        navigate("/home");
+        navigate("/announcements");
       }, 1500);
     } catch (err) {
       let message = "Failed to delete post. Please try again.";
@@ -139,6 +140,7 @@ const PostDetails = () => {
 
   return (
     <div className="w-full mt-6 px-4">
+      
       {/* Back Arrow */}
       <button
         onClick={handleGoBack}

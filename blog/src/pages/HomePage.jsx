@@ -12,7 +12,6 @@ function HomePage() {
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
 
-
   const auth = JSON.parse(localStorage.getItem("auth"));
   if (!auth?.userId) return alert("Please login first");
 
@@ -69,28 +68,35 @@ function HomePage() {
     return () => clearTimeout(delayDebounce);
   }, [searchQuery, posts]);
 
+  //Sort Post
+  const handleSort = (option) => {
+    setFilteredPosts((prevPosts) => {
+      const sorted = [...prevPosts];
+
+      if(option === "Latest"){
+        sorted.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
+      }else if(option === "Oldest"){
+        sorted.sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt));
+      } else if(option === "Title"){
+        sorted.sort((a,b) => a.title.localeCompare(b.title));
+      }
+      return sorted;
+    }); 
+  };
+
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="flex flex-col flex-1 overflow-hidden">
 
       <div className="flex flex-1 overflow-hidden">
-
-        {/* Sidebar */}
-        <div className="sticky">
-          <Sidebar onFilterChange={setFilteredPosts} />
-        </div>
-
         {/*Main Content*/}
-        <div className="flex-1 flex flex-col overflow-y-auto">
-
-          <div className="flex flex-col gap-3 px-5 pt-2">
-            <SearchBar setSearchQuery={setSearchQuery} />
+        <div className="flex-1 overflow-y-auto px-5 pt-3 bg-white">
+          <div className="p-1 py-2 text-xl font-semibold">
+            <h1>Announcements</h1>
           </div>
-
-          <div className="flex-1 overflow-y-auto px-5 bg-white">
-            <PostList posts={filteredPosts} />
-          </div>
-
+          <SearchBar setSearchQuery={setSearchQuery} onSort={handleSort}/>
+          <PostList posts={filteredPosts} />
         </div>
+
       </div>
     </div>
   );
